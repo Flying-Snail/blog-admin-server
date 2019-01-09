@@ -1,0 +1,20 @@
+@url = http://127.0.0.1:3333/admin/api
+###
+GET {{url}}/posts
+
+###
+POST {{url}}/posts
+Content-Type: application/json
+
+{
+  "tittle": "我的博客文章1"
+}
+###
+PUT {{url}}/posts/5c1734cbe2cc240840ff108f
+Content-Type: application/json
+
+{
+  "tittle": "我的第1篇博客"
+}
+###
+DELETE {{url}}/posts/5c342061741b1c59a1ce555b
