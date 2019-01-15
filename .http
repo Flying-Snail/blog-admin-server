@@ -7,14 +7,17 @@ POST {{url}}/posts
 Content-Type: application/json
 
 {
-  "tittle": "我的博客文章1"
+  "author": "SongLin",
+  "title": "我的博客文章25",
+  "is_top": false,
+  "label": ["javaScript", "CSS"]
 }
 ###
-PUT {{url}}/posts/5c1734cbe2cc240840ff108f
+PUT {{url}}/posts/5c3c2aeb072026549c8deef1
 Content-Type: application/json
 
 {
-  "tittle": "我的第1篇博客"
+  "auth": "hhh"
 }
 ###
-DELETE {{url}}/posts/5c342061741b1c59a1ce555b
+DELETE {{url}}/posts/5c3c4eae6939b05691ea4843

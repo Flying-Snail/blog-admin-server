@@ -20,7 +20,8 @@ class PostController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    return await Post.query().paginate(1, 10)
+    const query = request.get().page || 1
+    return await Post.query().paginate(query, 12)
   }
 
   /**
@@ -44,7 +45,11 @@ class PostController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    const data = request.only(['tittle'])
+    const data = Object.assign({}, request.post(), {
+      is_deleted: false,
+      like_num: 0,
+      comment_num: 0
+    })
     const model = new Post
     model.fill(data)
     await model.save()
