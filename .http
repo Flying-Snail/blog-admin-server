@@ -1,4 +1,5 @@
 @url = http://127.0.0.1:3333/admin/api
+@image = http://127.0.0.1:3333/assets/imgs
 ###
 GET {{url}}/posts
 
@@ -8,9 +9,9 @@ Content-Type: application/json
 
 {
   "author": "SongLin",
-  "title": "我的博客文章25",
+  "title": "我的博客文章27",
   "is_top": false,
-  "label": ["javaScript", "CSS"]
+  "label": []
 }
 ###
 PUT {{url}}/posts/5c3c2aeb072026549c8deef1
@@ -21,3 +22,17 @@ Content-Type: application/json
 }
 ###
 DELETE {{url}}/posts/5c3c4eae6939b05691ea4843
+###
+GET {{image}}/
+###
+POST {{image}}/
+Content-Type: application/json
+
+{
+  "author": "SongLin",
+  "title": "我的博客文章27",
+  "is_top": false,
+  "label": []
+}
+###
+DELETE {{image}}/5c3f11153916654a8a43f93f
