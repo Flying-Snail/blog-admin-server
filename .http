@@ -1,5 +1,5 @@
 @url = http://127.0.0.1:3333/admin/api
-@image = http://127.0.0.1:3333/assets/imgs
+@image = http://127.0.0.1:3333/admin/upload/image
 ###
 GET {{url}}/posts
 
@@ -21,11 +21,11 @@ Content-Type: application/json
   "auth": "hhh"
 }
 ###
-DELETE {{url}}/posts/5c3c4eae6939b05691ea4843
+DELETE {{url}}/posts/
 ###
-GET {{image}}/
+GET {{image}}
 ###
-POST {{image}}/
+POST {{image}}
 Content-Type: application/json
 
 {
@@ -35,4 +35,4 @@ Content-Type: application/json
   "label": []
 }
 ###
-DELETE {{image}}/5c3f11153916654a8a43f93f
+DELETE {{image}}/5c409c14686c397e59f18874

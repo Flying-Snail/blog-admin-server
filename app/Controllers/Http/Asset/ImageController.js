@@ -50,8 +50,8 @@ class ImageController {
   async store ({ request, response }) {
     
     const date = util.formatDate()
-    const path = 'assets/images/'+ date
-    const profilePic = request.file('file', {
+    const path = '/assets/images/'+ date
+    const profilePic = request.file('image', {
       types: ['image'],
       size: '10mb'
     })
@@ -118,6 +118,8 @@ class ImageController {
    */
   async destroy ({ params, request, response }) {
     const model = await Image.find(params.id)
+    const file = Helpers.resourcesPath() + model.file_path + '/' + model.file_name
+    await Drive.delete(file)
     await model.delete()
     return {
       success: true

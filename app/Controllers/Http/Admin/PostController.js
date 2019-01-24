@@ -20,8 +20,15 @@ class PostController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    const query = request.get().page || 1
-    return await Post.query().paginate(query, 12)
+    const posts = await Post.all()
+    const postsJSON = posts.toJSON()
+    postsJSON.sort((a, b) => Number(b.is_top) - Number(a.is_top))
+    const total = postsJSON.length
+    const page = request.get().page || 1
+    const perPage = 12
+    const lastPage = Math.ceil(total / perPage)
+    const data = postsJSON.slice((page - 1) * perPage, page * perPage)
+    return {total, page, perPage, lastPage, data}
   }
 
   /**
@@ -79,6 +86,7 @@ class PostController {
    * @param {View} ctx.view
    */
   async edit ({ params, request, response, view }) {
+    return await Post.find(params.id)
   }
 
   /**
@@ -90,7 +98,7 @@ class PostController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    const data = request.only(['tittle'])
+    const data = request.post()
     const model = await Post.find(params.id)
     model.merge(data)
     await model.save()
