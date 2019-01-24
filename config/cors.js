@@ -16,7 +16,10 @@ module.exports = {
   | Function - Receives the current origin and should return one of the above values.
   |
   */
-  origin: '*',
+  origin: function (currentOrigin) {
+    const host = currentOrigin.split('/')[2].split(':')[0]
+    return host === 'www.pinesage.club' || host === 'localhost'
+  },
 
   /*
   |--------------------------------------------------------------------------
