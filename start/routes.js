@@ -20,8 +20,8 @@ Route.get('/login', 'SiteController.login')
 Route.get('/posts', 'PostController.index')
 Route.get('/posts/:id', 'PostController.show')
 
-Route.get('/admin/api/index', 'Admin/SiteController.index')
 Route.resource('/admin/api/posts', 'Admin/PostController')
+Route.resource('/admin/api/labels', 'Admin/LabelController')
 Route.resource('/admin/upload/image', 'Asset/ImageController')
 
 // Uncomment the following code to test with mongodb

@@ -2,8 +2,6 @@
 
 const Env = use('Env')
 const Helpers = use('Helpers')
-console.log(Env.get('DB_USER'))
-console.log(Env.get('DB_PASSWORD'))
 module.exports = {
   /*
   |--------------------------------------------------------------------------

@@ -1,5 +1,7 @@
 'use strict'
 
+const Label = use('App/Models/Label')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -11,82 +13,73 @@ class LabelController {
   /**
    * Show a list of all labels.
    * GET labels
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index () {
+    const labels = await Label.all()
+    return labels
   }
 
-  /**
-   * Render a form to be used for creating a new label.
-   * GET labels/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  static async store (post_id, labels) {
+    labels.forEach(async (label) => {
+      // 查询数据库 name = label的数据
+      const modelLabels = await Label.query().where({ name: label }).fetch()
+
+      // 数据库不存在当前 label,新建 label,否则向 label 中 push post_id
+      if (modelLabels.rows.length === 0) {
+        this.create({name: label, posts: [post_id]})
+      } else {
+        this.add({ label, post_id, })
+      }
+    })
   }
 
-  /**
-   * Create/save a new label.
-   * POST labels
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  static async create (data) {
+    const model = new Label()
+    model.fill(data)
+    await model.save()
   }
 
-  /**
-   * Display a single label.
-   * GET labels/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  static async add ({ label, post_id }) {
+    const models = await Label.query().where({ name: label }).fetch()
+    const model = models[0]
+    const origin_posts = model.posts
+
+    model.posts = origin_posts.concat([post_id])
+    await model.save()
+
+    return {
+      success: true
+    }
   }
 
-  /**
-   * Render a form to update an existing label.
-   * GET labels/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  // static async delete (label) {
+  //   const models = await Label.query().where({ name: label }).fetch()
+  //   const model = models[0]
+  //   const post_all_promise = model.posts.map(async (post_id) => await Post.find(post_id))
 
-  /**
-   * Update label details.
-   * PUT or PATCH labels/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
+  //   await Promise.all(post_all_promise).then(posts => {
+  //     model.is_deleted = posts.filter(post => !post.is_deleted).length === 0
+  //   })
+  //   await model.save()
+  // }
+
+  async show ({ params }) {
+    const labelId = params.id
+    console.log(labelId)
+    const model = await Label.find(labelId)
+    return model.posts
   }
 
   /**
    * Delete a label with id.
-   * DELETE labels/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
+   * DELETE posts/:id
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
+    const model = await Label.find(params.id)
+    await model.delete()
+    return {
+      success: true
+    }
   }
 }
 

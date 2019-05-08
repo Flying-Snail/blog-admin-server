@@ -2,8 +2,7 @@
 
 const Image = use('App/Models/Image')
 const Helpers = use('Helpers')
-const Util = require('../../../util')
-const util = new Util()
+const util = require('../../../util')
 const Drive = use('Drive')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */

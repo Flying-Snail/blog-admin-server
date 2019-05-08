@@ -12,4 +12,7 @@ resources/assets
 # The development sqlite file
 database/development.sqlite
 
+# vscode 发送 http 请求插件
+.http
+
 yarn-error.log
