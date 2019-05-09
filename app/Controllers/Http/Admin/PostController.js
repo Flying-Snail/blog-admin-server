@@ -53,6 +53,7 @@ class PostController {
    */
   async store ({ request, response }) {
     const data = Object.assign({}, request.post(), {
+      is_released: false,
       is_deleted: false,
       like_num: 0,
       comment_num: 0,
