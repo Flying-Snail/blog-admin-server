@@ -21,7 +21,7 @@ class PostController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request }) {
     const label_id = request.get().label_id
     const page = request.get().page || 1
     const perPage = 10

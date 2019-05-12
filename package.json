@@ -26,6 +26,7 @@
     "@adonisjs/ignitor": "^2.0.6",
     "@adonisjs/lucid": "^5.0.4",
     "@adonisjs/validator": "^5.0.3",
+    "jsonwebtoken": "^8.5.1",
     "lucid-mongo": "^3.1.0"
   },
   "devDependencies": {},

@@ -16,10 +16,12 @@
 const Route = use('Route')
 
 Route.get('/', 'SiteController.index')
-Route.get('/login', 'SiteController.login')
+Route.post('/login', 'LoginController.index')
+Route.post('/register', 'LoginController.register')
 Route.get('/posts', 'PostController.index')
 Route.get('/posts/:id', 'PostController.show')
 
+Route.resource('/admin/api/users', 'Admin/UserController')
 Route.resource('/admin/api/posts', 'Admin/PostController')
 Route.resource('/admin/api/labels', 'Admin/LabelController')
 Route.resource('/admin/upload/image', 'Asset/ImageController')
