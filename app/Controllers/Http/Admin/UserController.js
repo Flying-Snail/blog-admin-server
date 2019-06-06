@@ -1,6 +1,7 @@
 'use strict'
 const User = use('App/Models/User')
 const jwt = require('jsonwebtoken')
+const { verifyUser } = require('../../../util')
 
 class UserController {
   async index ({request}) {
@@ -8,22 +9,23 @@ class UserController {
     const page = request.get().page || 1
     const perPage = request.get().perPage || 10
 
-    try {
-      const sign = jwt.verify(token, "844030491@qq.com")
-      const _id = sign.user_id
-      const model = await User.find(_id)
-      if (!model.admin) throw new Error("admin required")
-    } catch (error) {
-      throw error
-    }
+    verifyUser(token)
 
-    return await User.where({admin: false}).paginate(page, perPage)
+    return await User.where({admin: false, is_deleted: false}).paginate(page, perPage)
   }
 
-  /**
-   * Create/save a new post.
-   * POST posts
-   */
+  async show ({ request }) {
+    const token = request.header('authorization')
+    if (!token) return { success: false }
+    try {
+      const sign = jwt.verify(token, '844030491@qq.com')
+      const id = sign.user_id
+      return await User.find(id)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   async update ({ params, request }) {
     const data = request.post()
     const model = await User.find(params.id)
@@ -34,13 +36,12 @@ class UserController {
     }
   }
 
-  /**
-   * Delete a post with id.
-   * DELETE posts/:id
-   */
-  async destroy ({ params }) {
+  async destroy ({ params, request }) {
+    const token = request.header('authorization')
+    verifyUser(token)
+
     const user_id = params.id
-    const model = await Post.find(user_id)
+    const model = await User.find(user_id)
 
     if (!model || model.is_deleted) return
     model.is_deleted = true

@@ -82,6 +82,7 @@ class ImageController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    return await Image.find(params.id)
   }
 
   /**
