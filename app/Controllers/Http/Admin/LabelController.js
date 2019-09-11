@@ -41,7 +41,7 @@ class LabelController {
 
   static async add ({ label, post_id }) {
     const models = await Label.query().where({ name: label }).fetch()
-    const model = models[0]
+    const model = models.rows[0]
     const origin_posts = model.posts
 
     model.posts = origin_posts.concat([post_id])
@@ -52,20 +52,28 @@ class LabelController {
     }
   }
 
-  // static async delete (label) {
-  //   const models = await Label.query().where({ name: label }).fetch()
-  //   const model = models[0]
-  //   const post_all_promise = model.posts.map(async (post_id) => await Post.find(post_id))
+  static async lessPostLabels (labels, post_id) {
+    labels.forEach(label => {
+      this.less(label, post_id)
+    })
+  }
 
-  //   await Promise.all(post_all_promise).then(posts => {
-  //     model.is_deleted = posts.filter(post => !post.is_deleted).length === 0
-  //   })
-  //   await model.save()
-  // }
+  static async less (label, post_id) {
+    const models = await Label.query().where({ name: label }).fetch()
+    const model = models.rows[0]
+    const origin_posts = model.posts
+    const index = origin_posts.indexOf(post_id)
+
+    model.posts = origin_posts.splice(index, 1)
+    await model.save()
+
+    return {
+      success: true
+    }
+  }
 
   async show ({ params }) {
     const labelId = params.id
-    console.log(labelId)
     const model = await Label.find(labelId)
     return model.posts
   }

@@ -29,7 +29,12 @@ class LoginController {
     if ( !user_name || !password || !nick_name) return { success: false }
 
     const model = new User()
-    model.fill({ user_name, password, nick_name, admin: false, avatar_id, is_deleted: false })
+    model.fill({
+      user_name, password, nick_name, avatar_id,
+      admin: false,
+      is_deleted: false,
+      liked_posts: [],
+    })
     await model.save()
 
     return {

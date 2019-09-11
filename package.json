@@ -25,7 +25,10 @@
     "@adonisjs/framework": "^5.0.13",
     "@adonisjs/ignitor": "^2.0.6",
     "@adonisjs/lucid": "^5.0.4",
+    "@adonisjs/session": "^1.0.28",
+    "@adonisjs/shield": "^1.0.8",
     "@adonisjs/validator": "^5.0.3",
+    "@adonisjs/vow": "^1.0.17",
     "jsonwebtoken": "^8.5.1",
     "lucid-mongo": "^3.1.0"
   },

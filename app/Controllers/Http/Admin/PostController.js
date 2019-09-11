@@ -15,23 +15,33 @@ const { verifyUser } = require('../../../util')
  * Resourceful controller for interacting with posts
  */
 class PostController {
-  /**
-   * Show a list of all posts.
-   * GET posts
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
+
   async index ({ request }) {
     const label_id = request.get().label_id
     const page = request.get().page || 1
     const perPage = 10
-    let posts = {}
+    const token = request.header('authorization')
+    let posts = []
+    let isAdmin = false
+
+    if (!!token) {
+      // 权限认证，看请求人是否是管理员
+      try {
+        const sign = jwt.verify(token, '844030491@qq.com')
+        const id = sign.user_id
+        const model_user = await User.find(id)
+        isAdmin = model_user.admin
+      } catch (error) {
+      }
+    }
 
     if (!label_id) {
-      posts = await Post.where({is_deleted: false}).sort('-is_top').paginate(page, perPage)
+      // 带 label_id 参数的请求
+      // admin 权限可以查看所有博客，普通权限只能查看已发布
+      posts = isAdmin
+        ? await Post.where({is_deleted: false}).sort('-is_top').paginate(page, perPage)
+        : await Post.where({is_deleted: false, is_released: true}).sort('-is_top').paginate(page, perPage)
+
       return posts
     }
 
@@ -134,9 +144,21 @@ class PostController {
    * Update post details.
    * PUT or PATCH posts/:id
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
     const data = request.post()
     const model = await Post.find(params.id)
+    const oldLabels = model.labels
+    const newLabels = data.labels
+    const lessLabels = oldLabels.filter(label => {
+      return newLabels.indexOf(label) === -1
+    })
+    const addLabels = newLabels.filter(label => {
+      return oldLabels.indexOf(label) === -1
+    })
+
+    LabelController.store(params.id, addLabels)
+    LabelController.lessPostLabels(lessLabels, params.id)
+
     model.merge(data)
     await model.save()
     return {

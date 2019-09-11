@@ -18,7 +18,7 @@ module.exports = {
   */
   origin: function (currentOrigin) {
     const host = currentOrigin.split('/')[2].split(':')[0]
-    return host === 'www.pinesage.club' || host === 'localhost'
+    return host === 'www.pinesage.club' || host === 'localhost' || host === 'songlinblog.com'
   },
 
   /*

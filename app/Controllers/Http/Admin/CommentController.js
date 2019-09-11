@@ -40,6 +40,9 @@ class CommentController {
       replyed_user_id,
     }
 
+    const model_user = await User.find(user_id)
+    if (model_user.ban_comment) return { succeed: false, message: '无评论权限' }
+
     const model = new Comment()
     const model_post = await Post.find(post_id)
     const comment_num = model_post.comment_num + 1
